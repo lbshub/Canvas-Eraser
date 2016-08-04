@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>canvas橡皮檫：刮刮卡</title>
+</head>
+	<style>
+		*{margin: 0; padding: 0;}
+		body{max-width: 750px;}
+
+		.wrap{padding: 10px;}		
+		.box{position: relative; width: 100%; height:120px; overflow: hidden;}
+		.one, .two, .three{position: absolute; left: 0; top: 0; width: 100%; height: 120px;}
+		.one, .three{ z-index: 3; background: #f30; color: #f5f5f5; text-align: center; font-size: 30px; line-height: 120px;}
+		.two{ z-index: 2; }
+		.three{ z-index: 1; background: #f2f2f2; color: #f30; }		
+
+		/* use rem */
+		/*
+		.wrap{padding: 0.1rem;}		
+		.box{position: relative; width: 100%; height:1.2rem; overflow: hidden;}
+		.one, .two, .three{position: absolute; left: 0; top: 0; width: 100%; height: 1.2rem;}
+		.one, .three{ z-index: 3; background: #f30; color: #f5f5f5; text-align: center; font-size: 0.3rem; line-height: 1.2rem;}
+		.two{ z-index: 2; }
+		.three{ z-index: 1; background: #f2f2f2; color: #f30; }		
+		*/
+	
+	</style>
+
+<body>
+
+<!-- font size -->
+<!-- 
+<script type="text/javascript">
+(function(win, doc) {
+	var evt = 'onorientationchange' in win ? 'orientationchange' : 'resize',
+		timer = null,
+		setFontSize = function() {
+			var winWidth = doc.documentElement.clientWidth;
+			if (winWidth > 640) winWidth = 640;
+			doc.documentElement.style.fontSize = (winWidth / 640) * 100 + 'px';
+		};
+	win.addEventListener(evt, function() {
+		timer && clearTimeout(timer);
+		timer = setTimeout(setFontSize, 60);
+	}, false);
+	setFontSize();
+}(window, document));
+</script>
+ -->
+
+	<div style="height:200px;"></div>
+
+	<div class="wrap">
+		<div class="box">
+			<div class="one">点击开始</div>
+			<canvas class="two"></canvas>
+			<div class="three">恭喜，中奖了</div>
+		</div>
+	</div>
+
+	<div style="height:200px;"></div>
+	
+	<script src="eraser.min.js"></script>
+	<script>
+
+		var one = document.querySelector('.one'), //开始层
+			two = document.querySelector('.two'), // 刮刮层
+			three = document.querySelector('.three'), //结果层
+			// 实例化橡皮檫
+			eraser = new Eraser({
+				canvas: two, //canvas对象
+				// color: '#ccc', //要擦除的蒙版颜色
+				// size: 12, //笔触大小
+				// ratio: 0.6, //完成比率
+				complate: function() {
+					two.style.display = 'none';
+					alert('恭喜，中奖了！');
+				}
+			});
+
+		// 开始刮卡
+		one.addEventListener('click', function(){
+			one.style.display = 'none';
+			eraser.start();
+		});
+
+		// 再刮一次
+		three.addEventListener('click', function(){
+			two.style.display = '';
+			eraser.reset();
+		});
+
+
+	</script>
+
+</body>
+</html>
